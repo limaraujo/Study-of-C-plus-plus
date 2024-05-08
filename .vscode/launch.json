@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Algorithms",
-      "program": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Algorithms/build/Debug/outDebug",
+      "cwd": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Conceitos",
+      "program": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Conceitos/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

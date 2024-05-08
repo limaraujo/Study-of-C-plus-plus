@@ -15,8 +15,8 @@ int main(){
 
     //para inserir um elemento no meio da lista
     it=aula.begin();
-    advance(it,3); //adiciona ao lugar
-    aula.insert(it,0);
+    advance(it,3); //marca a posição da inserção 
+    aula.insert(it,0);//adiciona ao lugar
 
     aula.erase(--it);//remove um elemento
 

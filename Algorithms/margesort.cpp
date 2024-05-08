@@ -1,8 +1,8 @@
 #include <iostream>
 using namespace std;
 
-void margesort(int arr[], int inicio, int fim, int n);
-void marge(int arr[], int inicio, int fim, int n);
+void mergesort(int arr[], int inicio, int fim, int n);
+void merge(int arr[], int inicio, int fim, int n);
 
 int main(){
     int n; cin >> n;
@@ -12,7 +12,7 @@ int main(){
         cin >> arr[i];  
     }
 
-    margesort(arr, 0, n-1, n);
+    mergesort(arr, 0, n-1, n);
 
     for(int i = 0; i < n; i++){
         cout << arr[i] << " ";  
@@ -27,16 +27,16 @@ int main(){
     return 0;
 }
 
-void margesort(int arr[], int inicio, int fim, int n){
+void mergesort(int arr[], int inicio, int fim, int n){
     if(inicio < fim){
         int meio = (inicio + fim) / 2;
-        margesort(arr, inicio ,meio, n);
-        margesort(arr, meio + 1, fim, n);
-        marge(arr, inicio, fim, n);
+        mergesort(arr, inicio ,meio, n);
+        mergesort(arr, meio + 1, fim, n);
+        merge(arr, inicio, fim, n);
     }
 }
 
-void marge(int arr[], int inicio, int fim, int n){
+void merge(int arr[], int inicio, int fim, int n){
     int temp[n]; 
     for(int i = inicio; i <= fim; i++){
         temp[i] = arr[i];
