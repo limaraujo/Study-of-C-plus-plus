@@ -50,7 +50,8 @@ void merge(int arr[], int inicio, int fim, int n){
             arr[k] = temp[i2++];
         }else if(i2 > fim){
             arr[k] = temp[i1++];
-        }else if(temp[i1] <= temp[i2]){
+
+        }else if(temp[i1] >= temp[i2]){
             arr[k] = temp[i1++];
         }else{
             arr[k] = temp[i2++];

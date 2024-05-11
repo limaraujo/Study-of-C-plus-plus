@@ -15,7 +15,7 @@ struct personagem{  //dados do personagem
 /*
 serve como um modelo para a criação de variáveis de um dado tipo. O especificador não define 
 qualquer variável, ou seja, ele não designa qualquer espaço de memória e nomeia uma variável. 
-Ele serve apenas para especifi car como devem ser as variáveis quando definidas.
+Ele serve apenas para especificar como devem ser as variáveis quando definidas.
 */
 
 int main(){
