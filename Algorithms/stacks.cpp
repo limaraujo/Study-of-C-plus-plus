@@ -36,7 +36,7 @@ typedef struct Stack {
 
 
 int main() {
-    Stack stack;
+    Stack stack;    
     stack.push(5);
     stack.push(10);
     stack.push(15);

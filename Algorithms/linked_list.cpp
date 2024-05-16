@@ -64,15 +64,15 @@ void moveToEnd(List& l){
     l.curr = l.tail;
 }
 
-void prev(List& l){
-    if(l.curr == l.header){
+void prev(List& l) {
+    if (l.curr == l.header) {
         return;
     }
     Link* temp = l.header;
-    while (temp->next->next != l.curr) {
+    while (temp->next != l.curr) {
         temp = temp->next;
     }
-    l.curr = temp;
+    l.curr = temp; 
 }
 
 void next(List& l){
@@ -183,4 +183,3 @@ int main(){
     print(x);
     cout << endl << "Fim!";
 }
-
