@@ -6,27 +6,27 @@ typedef struct Link{
     int element;
     Link* next;
 
-    Link(int e): element(e), next(nullptr) {}
+    Link(int e) : element(e), next(nullptr) {}
 } Link;
 
 typedef struct List{
-    Link *head;
+    Link *header;
     Link *tail;
     Link *curr;
     int cnt;
 
-    List(): head(nullptr), tail(nullptr), curr(nullptr), cnt(0) {}
+    List(): header(nullptr), tail(nullptr), curr(nullptr), cnt(0) {}
 } List;
 
 void clean(List& l) {
-    Link* temp = l.head->next;
+    Link* temp = l.header->next;
     while (temp != nullptr) {
         Link* next = temp->next;
         delete temp;
         temp = next;
     }
-    l.head->next = nullptr;
-    l.curr = l.tail = l.head;
+    l.header->next = nullptr;
+    l.curr = l.tail = l.header;
     l.cnt = 0;
 }
 
@@ -38,8 +38,7 @@ void insert(List& l, int it){
         l.tail = l.curr->next;
     }
 
-    l.curr = l.curr->next;
-    l.curr->next = temp;
+    l.curr->next->next = temp;
     l.cnt++; 
 }
 
@@ -50,7 +49,7 @@ void append(List& l, int it){
 }
 
 void print(List& l){
-    Link* temp = l.head->next;
+    Link* temp = l.header->next;
     while (temp != nullptr) {
         cout << temp->element << " ";
         temp = temp->next;
@@ -58,7 +57,7 @@ void print(List& l){
 }
 
 void moveToStart(List& l){
-    l.curr = l.head->next;
+    l.curr = l.header;
 }
 
 void moveToEnd(List& l){
@@ -66,10 +65,10 @@ void moveToEnd(List& l){
 }
 
 void prev(List& l){
-    if(l.curr == l.head){
+    if(l.curr == l.header){
         return;
     }
-    Link* temp = l.head;
+    Link* temp = l.header;
     while (temp->next->next != l.curr) {
         temp = temp->next;
     }
@@ -77,7 +76,9 @@ void prev(List& l){
 }
 
 void next(List& l){
-    l.curr = l.curr->next;
+    if(l.curr != l.tail){
+        l.curr = l.curr->next;
+    }
 }
 
 int length(List& l){
@@ -85,7 +86,7 @@ int length(List& l){
 }
 
 int currPos(List& l){
-    Link* temp = l.head;
+    Link* temp = l.header;
     int i = 0;
     do{
         if(temp != l.curr){
@@ -98,7 +99,7 @@ int currPos(List& l){
 }
 
 void moveToPos(List& l, int it){
-    Link* temp = l.head;
+    Link* temp = l.header;
     for(int i = 0; i <it; i++){
         temp = temp->next;
     }        
@@ -115,16 +116,16 @@ void remove(List& l){
         return;
     }
     if(l.tail == l.curr->next){
+        delete(l.tail);
         l.tail = l.curr;
     }
     l.curr->next = l.curr->next->next;
     l.cnt--;  
 }
 
-    
 int main(){
     List x;
-    x.curr = x.tail = x.head = new Link(0);
+    x.curr = x.tail = x.header = new Link(0);
     append(x,1);
     append(x,2);
     append(x,3);
@@ -182,3 +183,4 @@ int main(){
     print(x);
     cout << endl << "Fim!";
 }
+
