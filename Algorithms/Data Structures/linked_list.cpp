@@ -99,6 +99,10 @@ int currPos(List& l){
 }
 
 void moveToPos(List& l, int it){
+    if(it < 0 || it > l.cnt){
+        return;
+    }
+
     Link* temp = l.header;
     for(int i = 0; i <it; i++){
         temp = temp->next;
