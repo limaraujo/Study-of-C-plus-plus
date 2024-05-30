@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Conceitos",
-      "program": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Conceitos/build/Debug/outDebug",
+      "cwd": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Algorithms/Hastable",
+      "program": "c:/Users/limaa/OneDrive/Documentos/GitHub/Study-of-C-plus-plus/Algorithms/Hastable/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
