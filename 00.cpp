@@ -19,11 +19,12 @@ typedef struct Dictionary{
         table = new vector<string>[sz];
     }
 
-    int find(const string& k){
+    int find(const string& k) {
         int pos = h(k, size);
-        for(int i = 0; i < table[pos].size(); i++){
-            if(table[pos][i] == k)
-            return i;
+        for (int i = 0; i < table[pos].size(); ++i) {
+            if (table[pos][i] == k) {
+                return i;
+            }
         }
         return -1;
     }

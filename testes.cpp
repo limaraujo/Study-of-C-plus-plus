@@ -1,84 +1,73 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <iostream>
+#include <cmath>
 
-typedef struct Link{
-    int element;
-    Link* next;
-    Link(int it): element(it), next(nullptr) {}
-}Link;
+// Define a estrutura de um elemento na tabela
+struct Elemento {
+    int valor;
+};
 
-typedef struct Queue{
-    Link* front;
-    Link* rear;
-    int size;
+// Declaração da tabela e tamanho
+const int SIZE = 8;
+Elemento table[SIZE];
 
-    Queue(){
-        front = rear = new Link(0);
-        size = 0;
-    }
+// Função de hashing
+int hashing(int k, int size) {
+    return k - (size * static_cast<int>(std::floor(static_cast<double>(k) / size)));
+}
 
-    void enqueue(int it){
-        rear->next = new Link(it);
-        rear = rear->next;
-        size++;
-    }
-
-    int dequeue() {
-        if (size == 0) {
-            return -1;
+// Função find
+int find(int k, int Perm[], int size) {
+    int idx = hashing(k, size);
+    int startIdx = idx;
+    if (table[idx].valor != -1) {
+        for (int j = 0; j < size - 1; j++) {
+            int p = Perm[j-1];
+            idx = (startIdx + p) % size;
+            if (table[idx].valor == -1) {
+                return idx;
+            }
         }
-
-        Link* temp = front->next;
-        int it = temp->element;
-        front->next = temp->next;
-        if (rear == temp) {
-            rear = front;
-        }
-        delete temp;
-        size--;
-        return it;
+    } else {
+        return idx;
     }
-
-    void clean(){
-        Link* temp = front->next;
-        while(temp != nullptr){
-            Link* next = temp->next;
-            delete temp;
-            temp = next;
-        }
-        front->next = nullptr;
-        rear = front; size = 0;
-    }
-
-    int frontValue(){
-        return front->next->element;
-    }
-
-    int Length(){
-        return size;
-    }
-
-}Queue;
+    return -1;
+}
 
 int main() {
-    Queue q;
+    // Inicializa a tabela com -1 (indicando vazia)
+    for (int i = 0; i < SIZE; i++) {
+        table[i].valor = -1;
+    }
 
-    cout << "Enfileirando 10, 20, 30..." << endl;
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
+    // Permutação fornecida
+    int Perm[SIZE - 1] = {2, 6, 7, 3, 1, 4, 5};
 
-    cout << "Tamanho da fila: " << q.size << endl;  // Esperado: 3
-    cout << "Elemento front : " << q.frontValue() << endl;
-    cout << "Desenfileirando: " << q.dequeue() << endl;  // Esperado: 10
-    cout << "Desenfileirando: " << q.dequeue() << endl;  // Esperado: 20
+    // Valores para inserir
+    int valores[] = {2, 4, 8, 16, 32, -12};
+    int numValores = sizeof(valores) / sizeof(valores[0]);
 
-    cout << "Tamanho da fila: " << q.size << endl;  // Esperado: 1
+    // Inserção dos valores na tabela
+    for (int i = 0; i < numValores; i++) {
+        int k = valores[i];
+        int index = find(k, Perm, SIZE);
+        std::cout << "Valor " << k << ", índice encontrado: " << index << std::endl;
 
-    q.clean();
-    cout << "Tamanho da fila apos limpar: " << q.size << endl;  // Esperado: 0
+        // Inserindo o valor na tabela
+        if (index != -1) {
+            table[index].valor = k;
+            std::cout << "Valor " << k << " inserido na posição " << index << std::endl;
+        } else {
+            std::cout << "Nenhuma posição encontrada para o valor " << k << std::endl;
+        }
+    }
 
-    cout << "Desenfileirando apos limpar: " << q.dequeue() << endl;  // Esperado: -1
+    std::cout << find(5, Per, 8)
+
+    // Imprimindo a tabela resultante
+    std::cout << "\nTabela de hash:\n";
+    for (int i = 0; i < SIZE; i++) {
+        std::cout << i << ": " << table[i].valor << std::endl;
+    }
 
     return 0;
 }
