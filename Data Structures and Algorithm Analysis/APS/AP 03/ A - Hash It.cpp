@@ -1,22 +1,19 @@
+//closed certo
+
 #include <bits/stdc++.h>
 using namespace std;
 
 struct Entry {
-    string valor;
-    bool deleted;
+    string valor;bool deleted;
     Entry() : valor(""), deleted(false) {}
 };
 
 struct Dictionary {
-    int size;
-    int currcnt;
-    Entry* table;
-
+    int size; int currcnt; Entry* table;
     Dictionary(int sz) : size(sz), currcnt(0), table(new Entry[sz]) {}
 
     int Hash(string k) {
-        int i = 1;
-        int chave = 0;
+        int i = 1; int chave = 0;
         for (char c : k) {
             chave += c * i++;
         }
