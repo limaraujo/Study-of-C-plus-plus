@@ -1,121 +1,109 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Element{
+struct Entry {
     string valor;
-    bool occupied;
-    
-    Element() : valor(""), occupied(false){}
-    Element(string e) : valor(e), occupied(true){}
+    bool deleted;
+    Entry() : valor(""), deleted(false) {}
 };
 
-typedef struct Dictionary{
+struct Dictionary {
     int size;
     int currcnt;
-    Element* table;
+    Entry* table;
 
-    Dictionary(int sz) : size(sz), currcnt(0), table(new Element[sz]){}
+    Dictionary(int sz) : size(sz), currcnt(0), table(new Entry[sz]) {}
 
-    int Hash(string k){
-        int i = 1; int chave = 0;
-        for(char c: k){
-            chave += c* i ++;
+    int Hash(string k) {
+        int i = 1;
+        int chave = 0;
+        for (char c : k) {
+            chave += c * i++;
         }
-        return (19*chave) %101;
+        return (19 * chave) % 101;
     }
 
-
-    int find(string k){
-        int idx = Hash(k);
-        int startIdx = idx;
-
-        for(int j = 1; table[idx].occupied && j < 20; j++){
-            if(table[idx].valor == k){
+    int find(string k) {
+        int idx, startIdx = Hash(k);
+        for (int j = 0; j < 20; j++) {
+            idx = (startIdx + (23 * j) + (j * j)) % 101;
+            if (table[idx].valor == k && !table[idx].deleted) {
                 return idx;
             }
-            int p = (j*j) + (23 * j++);
-            idx = (startIdx + p) % size;
         }
-        
-        if(table[idx].valor == k){
-            return idx;
-        }
-
         return -1;
     }
 
-    void insert(string k){
+    void insert(string k) {
         if (currcnt >= size) {
             return;
         }
-        int idx = Hash(k);
-        int startIdx = idx;
-        int j = 1;
-
-        while( table[idx].valor != ""){
-            if(table[idx].valor == k){return;}
-
-            int p = (j*j) + (23 * j++);
-            idx = (startIdx + p) % size;
-
-            if(j == 20 && table[idx].valor != ""){return;}
+        int idx, startIdx = Hash(k);
+        if (find(k) != -1) {
+            return;
         }
-
-        table[idx] = Element(k);
-        currcnt++;
+        for (int j = 0; j < 20; j++) {
+            idx = (startIdx + (23 * j) + (j * j)) % 101;
+            if (table[idx].valor == "" || table[idx].deleted) {
+                table[idx].valor = k;
+                table[idx].deleted = false;
+                currcnt++;
+                break;
+            }
+        }
     }
 
-    void remove(string k){
+    void remove(string k) {
         int pos = find(k);
-
-        if(currcnt == 0 || pos == -1){return;}
-        
-        table[pos].valor = "";
+        if (currcnt == 0 || pos == -1) { 
+            return; 
+        }
+        table[pos].deleted = true;
         currcnt--;
     }
 
-    void clean() {
+    void clear() {
         for (int i = 0; i < size; i++) {
-            table[i] = Element();
+            table[i].valor.clear();
+            table[i].deleted = false;
         }
         currcnt = 0;
     }
 
-    void printKeysOccupieds(){
+    void printKeysOccupied(){
         cout << currcnt << endl;
         for(int i = 0; i < size; i++){
-            if(table[i].valor != ""){
-                cout << i << ": " << table[i].valor << endl;
+            if(table[i].valor != "" && !table[i].deleted){
+                cout << i << ":" << table[i].valor << endl;
             }
         }
-        cout << endl;
     }
 };
 
-void solve (Dictionary dict){
-    int cases, op; cin >> cases;
-    string operation;string valor;
+void solve(Dictionary& dict) {
+    int cases;
+    cin >> cases;
 
-    for(int n = 0; n < cases; n++){
+    for (int n = 0; n < cases; n++) {
+        int op;
         cin >> op;
 
-        for(int m = 0; m < op; m++){
-            getline(cin, operation, ':');
-            getline(cin, valor);
-            if(operation == "ADD"){
-                dict.insert(valor);
-            }else{
-                dict.remove(valor);
+        for (int m = 0; m < op; m++) {
+            string op;cin >> op;
+            if (op.substr(0, 3) == "ADD") {
+                dict.insert(op.substr(4));
+            } else if (op.substr(0, 3) == "DEL") {
+                dict.remove(op.substr(4));
             }
         }
 
-        dict.printKeysOccupieds();
-        dict.clean();
+        dict.printKeysOccupied();
+        dict.clear();
     }
-    
 }
 
-int main (){
+int main() {
     Dictionary dict(101);
     solve(dict);
+    return 0;
 }
