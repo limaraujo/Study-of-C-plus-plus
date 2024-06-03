@@ -1,3 +1,4 @@
+//open hastable
 #include <bits/stdc++.h>
 using namespace std;
 
