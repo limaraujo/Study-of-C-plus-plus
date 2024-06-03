@@ -1,3 +1,5 @@
+//sfold e fold
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -25,3 +27,12 @@ int hashing(string k,int size){
 
     return abs(sum) % size;
 }
+
+//fold
+    int h(string& k, int size){
+        int s = k.length(), sum = 0;
+        for (int i = 0; i < s; ++i) {
+            sum += k[i];
+        }
+        return sum % size;
+    }
