@@ -1,0 +1,10 @@
+add 123
+add 333
+add 4000
+solve
+print
+stats
+add 541
+stats
+print
+end
