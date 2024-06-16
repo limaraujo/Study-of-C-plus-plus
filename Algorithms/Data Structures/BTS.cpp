@@ -39,7 +39,7 @@ struct BTS {
         }
         if (k > rt->key) {
             rt->right = insertHelp(rt->right, k, e);
-        } else if (k < rt->key) {
+        } else {
             rt->left = insertHelp(rt->left, k, e);
         }
         return rt;
