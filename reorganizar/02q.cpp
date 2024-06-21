@@ -1,3 +1,4 @@
+//heap
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -33,8 +34,12 @@ private:
         int left = childLeft(i);
         int right = childRight(i);
 
-        if (left <= currSize && heap[left] < heap[top]) {top = left;}
-        if (right <= currSize && heap[right] < heap[top]) {top = right;}
+        if (left <= currSize && heap[left] < heap[top]) {
+            top = left;
+        }
+        if (right <= currSize && heap[right] < heap[top]) {
+            top = right;
+        }
 
         if (top != i) {
             swap(heap[top], heap[i]);
