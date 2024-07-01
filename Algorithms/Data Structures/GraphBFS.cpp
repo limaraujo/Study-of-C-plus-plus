@@ -6,6 +6,7 @@ private :
     vector<vector<int>> matrix;
     int numEdge;
     int* mark;
+    int* pred;
 
     int n(){return matrix.size();}
     int e(){return numEdge;}
@@ -16,6 +17,8 @@ public :
         numEdge = 0;
         mark = (int*)malloc(n * sizeof(int));
         memset(mark, 0, n * sizeof(int));
+        pred = (int*)malloc(n * sizeof(int));
+        memset(pred, -1, n * sizeof(int));
     };
 
     int first(int v){
@@ -88,6 +91,7 @@ public :
             while (w < n()){
                 if (getMark(w) == 0){
                     setMark(w,1);
+                    pred[w] = v;
                     Q.push(w);
                 }
                 w = next(v,w);
@@ -104,6 +108,13 @@ public :
             if(getMark(v) == 0)
             BFS(v);
         }
+    }
+
+    void printPred() {
+        for (int i = 0; i < n(); i++) {
+            cout << pred[i] << " ";
+        }
+        cout << endl;
     }
 
 };
@@ -128,6 +139,7 @@ int main() {
     //g.setEdge(5, 3, 1);
     //g.setEdge(5, 4, 1);
     g.graphTraverse();  // Pode ser chamado para percorrer o grafo inteiro.
+    g.printPred();
 
     return 0;
 }
