@@ -3,13 +3,13 @@ using namespace std;
 
 class Graph {
 private:
-    list<int> *adj;
+    list<pair<int, int>> *adj;
     int numEdge, numNode;
     int* mark;
 
 public:
     Graph(int n) {
-        adj = new list<int>[n];
+        adj = new list<pair<int, int>>[n];
         numEdge = 0; numNode = n;
         mark = new int[n];
         memset(mark, 0, n * sizeof(int));
@@ -30,47 +30,51 @@ public:
 
     int first(int v) const {
         if (adj[v].empty()) {
-            return -1;
+            return n();
         }
-        return adj[v].front();
+        return adj[v].front().first;
     }
 
     int next(int v, int w) const {
         auto it = adj[v].begin();
-        while (it != adj[v].end() && *it != w) {
+        while (it != adj[v].end() && it->first != w) {
             ++it;
         }
         if (it != adj[v].end()) {
             ++it;
             if (it != adj[v].end()) {
-                return *it;
+                return it->first;
             }
         }
-        return -1;
+        return n();
     }
 
     void setEdge(int i, int j, int wt) {
         if (wt == 0) return;
-        adj[i].push_back(j);
+        adj[i].push_back({j, wt});
         numEdge++;
     }
 
     void delEdge(int i, int j) {
-        adj[i].remove(j);
-        numEdge--;
+        for (auto it = adj[i].begin(); it != adj[i].end(); ++it) {
+            if (it->first == j) {
+                adj[i].erase(it);
+                numEdge--;
+                break;
+            }
+        }
     }
 
     bool isEdge(int i, int j) const {
         for (const auto& neighbor : adj[i]) {
-            if (neighbor == j) return true;
+            if (neighbor.first == j) return true;
         }
         return false;
     }
 
     int weight(int i, int j) const {
-        // Assume weight is always 1 in this case
         for (const auto& neighbor : adj[i]) {
-            if (neighbor == j) return 1;
+            if (neighbor.first == j) return neighbor.second;
         }
         return 0;
     }
@@ -94,7 +98,7 @@ public:
     void toposort(int v, stack<int>& s) {
         setMark(v, 1);
         int w = first(v);
-        while (w != -1) {
+        while (w != n()) {
             if (getMark(w) == 0) {
                 toposort(w, s);
             }
@@ -137,6 +141,18 @@ int main() {
 
     cout << "Topological Sort: ";
     printStack(top);
+
+    g.delEdge(4, 6);
+
+    for (int i = 0; i < n; i++) {
+        g.setMark(i, 0);
+    }
+
+    stack<int> newTop;
+    g.graphTraverse(newTop);
+
+    cout << "Topological Sort after removing edge (4, 6): ";
+    printStack(newTop);
 
     return 0;
 }
