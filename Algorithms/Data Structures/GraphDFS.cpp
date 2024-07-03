@@ -5,6 +5,7 @@ class Graph {
 private:
     vector<vector<int>> matrix;  // Matriz de adjacência.
     vector<int> mark;            // Vetor de marcação para controlar os vértices visitados.
+    vector<int> pred;
     int numEdge;                 // Contador de arestas.
 
     int n() { return matrix.size(); }  // Retorna o número de vértices.
@@ -15,6 +16,7 @@ public:
     Graph(int n) {
         matrix = vector<vector<int>>(n, vector<int>(n, 0)); // Cria a matriz de adjacência com zeros.
         mark = vector<int>(n, 0);                          // Inicializa todas as marcações com 0 (não visitado).
+        pred = vector<int>(n, -1);                          // Inicializa todas as marcações com 0 (não visitado).
         numEdge = 0;                                        // Inicializa o contador de arestas com 0.
     }
 
@@ -80,7 +82,7 @@ public:
 
     // Função chamada antes de visitar os vizinhos de 'v'.
     void preVisit(int v) {
-        cout << "Pre-visit: " << v << endl;
+        cout << v << " ";
     }
 
     // Função chamada após visitar todos os vizinhos de 'v'.
@@ -99,42 +101,77 @@ public:
             }
             w = next(v, w);  // Pega o próximo vizinho de 'v'.
         }
-        postVisit(v);
+        //postVisit(v);
     }
 
     // Percorre todo o grafo, chamando DFS para cada componente conectado.
-    void graphTraverse() {
+    void graphTraverseDFS(int i) {
         for (int v = 0; v < n(); v++) {
             setMark(v, 0);  // Marca todos os vértices como não visitados.
         }
-        for (int v = 0; v < n(); v++) {
-            if (getMark(v) == 0) {
-                DFS(v);  // Chama DFS para cada vértice não visitado.
+        //for (int v = 0; v < n(); v++) {
+        //    if (getMark(v) == 0) {
+        //      DFS(v);  // Chama DFS para cada vértice não visitado.
+        //    }}
+        DFS(i);
+        cout << endl;
+    }
+
+    void BFS(int v){
+        queue <int>  Q;
+        Q.push(v);
+        setMark(v, 1);
+        while(!Q.empty()){
+            int v = Q.front();
+            Q.pop();
+            preVisit(v);
+            int w = first(v);
+            while (w < n()){
+                if (getMark(w) == 0){
+                    setMark(w,1);
+                    Q.push(w);
+                }
+                w = next(v,w);
             }
         }
+    }
+
+    void graphTraverseBFS(int i){
+        for(int v = 0;v < n(); v++){
+            mark[v] = 0;
+        }
+        BFS(i);
+        cout << endl;
+    }
+
+    void printPred(){
+        for(auto i : pred){
+            cout << i << " ";
+        }
+        cout << endl;
     }
 };
 
 int main() {
-    // Exemplo de uso do grafo
-    Graph g(6);  // Cria um grafo com 6 vértices.
-    g.setEdge(0, 2, 1);
-    g.setEdge(0, 4, 1);
-    g.setEdge(1, 2, 1);
-    g.setEdge(1, 5, 1);
-    g.setEdge(2, 3, 1);
-    g.setEdge(2, 5, 1);
-    g.setEdge(3, 5, 1);
-    g.setEdge(4, 5, 1);
-    //g.setEdge(2, 0, 1);  // Estas linhas são comentadas porque adicionam arestas já definidas ou redundantes.
-    //g.setEdge(2, 1, 1);
-    //g.setEdge(3, 2, 1);
-    //g.setEdge(4, 0, 1);
-    //g.setEdge(5, 1, 1);
-    //g.setEdge(5, 2, 1);
-    //g.setEdge(5, 3, 1);
-    //g.setEdge(5, 4, 1);
-    g.graphTraverse();  // Pode ser chamado para percorrer o grafo inteiro.
+    int n, q, i, j; string op;
+    cin >> n >> q;
+    Graph Hogwarts(n);
+    
+    while (q--){
+        cin >> op;
+        if(op == "add"){
+            cin >> i >> j;
+            Hogwarts.setEdge(i,j,1);
+        }else if(op == "BFS"){
+            cin >> i;
+            Hogwarts.graphTraverseBFS(i);
+            cout<< "Predecessores" << endl;
+            Hogwarts.printPred();
+        }else if(op == "DFS"){
+            cin >> i;
+            Hogwarts.graphTraverseDFS(i);
+        }
+    }
 
-    return 0;
+    return 0;  
 }
