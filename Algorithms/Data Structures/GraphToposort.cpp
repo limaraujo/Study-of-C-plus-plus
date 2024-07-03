@@ -4,7 +4,8 @@ using namespace std;
 class Graph {
 private:
     list<pair<int, int>> *adj;
-    int numEdge, numNode;
+    int numEdge,
+    numNode;
     int* mark;
 
 public:
