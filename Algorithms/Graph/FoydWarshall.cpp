@@ -30,7 +30,7 @@ public:
                 return neighbor.second;
             }
         }
-        return 0;
+        return -1;
     }
 
     void Floyd(vector<vector<int>>& D) {
