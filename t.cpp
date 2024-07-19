@@ -1,96 +1,75 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define VISITED 1
+#define INF 100000000
 #define UNVISITED 0
+#define VISITED 1
 
-class Graph {
+class Graph{
 private:
-    vector<vector<int>> adjList;
+    vector<vector<pair<int,int>>> adjList;
     vector<int> mark;
-    unordered_map<int, int> predecessores;
-    int numEdge;
-    int numNode;
+    int numEdges, numNodes;
 
 public:
-    Graph(int n) : numNode(n), numEdge(0), adjList(n), mark(n, UNVISITED) {}
+    Graph(int N) : adjList(N), mark(N, UNVISITED), numNodes(N), numEdges(0){}
 
-    void setEdge(int i, int j) {
-        adjList[i].push_back(j);
-        adjList[j].push_back(i);  
-        numEdge++;
+    void setEdge(int i, int j, int wt){
+        adjList[i].emplace_back(j,wt);
+        adjList[j].emplace_back(i,wt);
+        numEdges++;
     }
 
-    void BFS(int v) {
-        queue<int> Q;
-        Q.push(v);
-        mark[v] = VISITED;
-        predecessores[v] = -1;
+    void Dijkstra(int s, int D[]){
+        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> H;
+        int P[numNodes]; int v, p;
 
-        while (!Q.empty()) {
-            int s = Q.front();
-            Q.pop();
+        for(int i = 0; i < numNodes; i++){
+            D[i] = INF; P[i] = -1; mark[i] = UNVISITED;
+        }
 
-            sort(adjList[s].begin(), adjList[s].end());  
+        H.push({0,{s,0}}); D[s] = 0;
+        for(int i = 0; i < numNodes; i++){
+        do{
+            if(H.empty()) return;
+            auto top = H.top(); H.pop();
+            p = top.second.first;
+            v = top.second.second;
+        }while(mark[v] == VISITED);
 
-            for (int w : adjList[s]) {
-                if (mark[w] == UNVISITED) {
-                    mark[w] = VISITED;
-                    predecessores[w] = s;
-                    Q.push(w);
+        mark[v] = VISITED; P[v] = p;
+        for(auto neighbor : adjList[v]){
+            int w = neighbor.first;
+            int weight = neighbor.second;
+                if (mark[w] != VISITED && D[w] > D[v] + weight) { // Se o vizinho não foi visitado e a nova distância é menor
+                    D[w] = D[v] + weight; // Atualiza a distância do vizinho
+                    H.push({D[w], {v, w}}); // Insere o vizinho na fila de prioridade com a nova distância
                 }
             }
         }
     }
-
-    void graphTraverse(int start) {
-        fill(mark.begin(), mark.end(), UNVISITED);
-        predecessores.clear();
-        BFS(start);
-    }
-
-    void menorCaminho(int inicio, int fim) {
-        graphTraverse(inicio);
-        vector<int> path;
-        if (predecessores.find(fim) == predecessores.end()) {
-            cout << -1 << endl;
-            return;
-        }
-
-        for (int at = fim; at != -1; at = predecessores[at]) {
-            path.push_back(at);
-        }
-
-        reverse(path.begin(), path.end());
-
-        for (int i = 0; i < path.size(); ++i) {
-            if (i != 0) cout << " ";
-            cout << path[i];
-        }
-        cout << endl;
-    }
 };
 
 int main() {
-    int cases;
-    cin >> cases;
-    int v, a;
-    int x, y, op;
-    while(cases--){
-        cout << "Caso " << cases+1 << endl;
-        cin >> v >> a;
-        Graph G(v);
-        if(a>0){
-            for (int j = 0; j < a; j++) {
-                cin >> x >> y;
-                G.setEdge(x, y);
-            }
-            cin >> op;
-            while (op--) {
-                cin >> x >> y;
-                G.menorCaminho(x, y);
-            }
-        }
+    int numNodes = 5; // Define o número de nós no grafo
+    Graph g(numNodes); // Cria um grafo com 5 nós
+
+    // Adiciona as arestas com seus respectivos pesos
+    g.setEdge(0, 1, 10);
+    g.setEdge(0, 3, 30);
+    g.setEdge(0, 4, 100);
+    g.setEdge(1, 2, 50);
+    g.setEdge(2, 4, 10);
+    g.setEdge(3, 2, 20);
+    g.setEdge(3, 4, 60);
+
+    int D[numNodes]; // Array para armazenar as distâncias
+    g.Dijkstra(0, D); // Executa o algoritmo de Dijkstra a partir do nó de origem 0
+
+    // Exibe as distâncias do nó de origem (0) para todos os outros nós
+    for (int i = 0; i < numNodes; i++) {
+        cout << "Distância do nó 0 ao nó " << i << " é " << D[i] << endl;
     }
+
     return 0;
 }
