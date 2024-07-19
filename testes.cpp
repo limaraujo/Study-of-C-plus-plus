@@ -1,94 +1,62 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+
 using namespace std;
 
-#define VISITED 1
-#define UNVISITED 0
-
-class Graph {
-private:
-    vector<vector<int>> adjList;
-    vector<int> mark;
-    unordered_map<int, int> predecessores;
-    int numEdge;
-    int numNode;
-
-public:
-    Graph(int n) : numNode(n), numEdge(0), adjList(n), mark(n, UNVISITED) {}
-
-    void setEdge(int i, int j) {
-        adjList[i].push_back(j);
-        adjList[j].push_back(i);  
-        numEdge++;
-    }
-
-    void BFS(int v) {
-        queue<int> Q;
-        Q.push(v);
-        mark[v] = VISITED;
-        predecessores[v] = -1;
-
-        while (!Q.empty()) {
-            int s = Q.front();
-            Q.pop();
-
-            sort(adjList[s].begin(), adjList[s].end());  
-
-            for (int w : adjList[s]) {
-                if (mark[w] == UNVISITED) {
-                    mark[w] = VISITED;
-                    predecessores[w] = s;
-                    Q.push(w);
+int bfs(const vector<vector<int>>& graph, int start, int end) {
+    if (start == end) return 0;
+    
+    vector<int> distance(graph.size(), -1);
+    queue<int> q;
+    
+    distance[start] = 0;
+    q.push(start);
+    
+    while (!q.empty()) {
+        int node = q.front();
+        q.pop();
+        
+        for (int neighbor : graph[node]) {
+            if (distance[neighbor] == -1) {
+                distance[neighbor] = distance[node] + 1;
+                q.push(neighbor);
+                if (neighbor == end) {
+                    return distance[neighbor];
                 }
             }
         }
     }
-
-    void graphTraverse(int start) {
-        fill(mark.begin(), mark.end(), UNVISITED);
-        fill(predecessores.begin(), predecessores.end(), -1);
-        BFS(start);
-    }
-
-    void menorCaminho(int inicio, int fim) {
-        graphTraverse(inicio);
-        vector<int> path;
-        if (predecessores[fim] == -1) {
-            cout << -1 << endl;
-            return;
-        }
-
-        for (int at = fim; at != -1; at = predecessores[at]) {
-            path.push_back(at);
-        }
-
-        reverse(path.begin(), path.end());
-
-        for (int i = 0; i < path.size(); ++i) {
-            if (i != 0) cout << " ";
-            cout << path[i];
-        }
-        cout << endl;
-    }
-};
+    
+    return -1;
+}
 
 int main() {
-    int cases;
-    cin >> cases;
-    int v, a;
-    int x, y, op;
-    while(cases--){
-        cout << "Caso " << cases+1 << endl;
+    int c;
+    cin >> c;
+    
+    for (int k = 1; k <= c; ++k) {
+        int v, a;
         cin >> v >> a;
-        Graph G(v);
-        for (int j = 0; j < a; j++) {
-            cin >> x >> y;
-            G.setEdge(x, y);
+        
+        vector<vector<int>> graph(v);
+        
+        for (int i = 0; i < a; ++i) {
+            int u, w;
+            cin >> u >> w;
+            graph[u].push_back(w);
         }
-        cin >> op;
-        while (op--){
-            cin >> x >> y;
-            G.menorCaminho(x, y);
+        
+        int n;
+        cin >> n;
+        
+        cout << "Caso " << k << endl;
+        for (int i = 0; i < n; ++i) {
+            int s, t;
+            cin >> s >> t;
+            cout << bfs(graph, s, t) << endl;
         }
     }
+    
     return 0;
 }
