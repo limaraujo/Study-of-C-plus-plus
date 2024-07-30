@@ -1,62 +1,53 @@
-#include <iostream>
-#include <vector>
-#include <queue>
+#include <bits/stdc++.h>
 
 using namespace std;
 
-int bfs(const vector<vector<int>>& graph, int start, int end) {
-    if (start == end) return 0;
-    
-    vector<int> distance(graph.size(), -1);
-    queue<int> q;
-    
-    distance[start] = 0;
-    q.push(start);
-    
-    while (!q.empty()) {
-        int node = q.front();
-        q.pop();
-        
-        for (int neighbor : graph[node]) {
-            if (distance[neighbor] == -1) {
-                distance[neighbor] = distance[node] + 1;
-                q.push(neighbor);
-                if (neighbor == end) {
-                    return distance[neighbor];
+void f(int** G, int n) {
+    int mark[n] = {0}; // Inicializa o vetor mark com zeros
+
+    for (int i = 0; i < n; i++) {
+        if (mark[i] == 0) {
+            priority_queue<int, vector<int>, greater<int>> Q;
+            Q.push(i); 
+            mark[i] = 1;
+
+            while (!Q.empty()) {
+                int s = Q.top();
+                Q.pop();
+
+                for (int j = 0; j < n; j++) {
+                    if (G[s][j] == 1 && mark[j] == 0) {
+                        mark[j] = 1;
+                        Q.push(j);
+                    }
                 }
             }
         }
     }
-    
-    return -1;
 }
 
 int main() {
-    int c;
-    cin >> c;
-    
-    for (int k = 1; k <= c; ++k) {
-        int v, a;
-        cin >> v >> a;
-        
-        vector<vector<int>> graph(v);
-        
-        for (int i = 0; i < a; ++i) {
-            int u, w;
-            cin >> u >> w;
-            graph[u].push_back(w);
-        }
-        
-        int n;
-        cin >> n;
-        
-        cout << "Caso " << k << endl;
-        for (int i = 0; i < n; ++i) {
-            int s, t;
-            cin >> s >> t;
-            cout << bfs(graph, s, t) << endl;
-        }
+    int n = 4;
+
+    // Aloca a matriz G dinamicamente
+    int** G = new int*[n];
+    for (int i = 0; i < n; ++i) {
+        G[i] = new int[n];
     }
-    
+
+    // Inicializa a matriz de adjacência
+    G[0][0] = 0; G[0][1] = 1; G[0][2] = 0; G[0][3] = 0;
+    G[1][0] = 1; G[1][1] = 0; G[1][2] = 1; G[1][3] = 1;
+    G[2][0] = 0; G[2][1] = 1; G[2][2] = 0; G[2][3] = 1;
+    G[3][0] = 0; G[3][1] = 1; G[3][2] = 1; G[3][3] = 0;
+
+    f(G, n);
+
+    // Libera a memória alocada
+    for (int i = 0; i < n; ++i) {
+        delete[] G[i];
+    }
+    delete[] G;
+
     return 0;
 }
