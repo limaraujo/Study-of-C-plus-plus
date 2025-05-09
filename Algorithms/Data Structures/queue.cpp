@@ -31,13 +31,11 @@ typedef struct Queue{
             return -1;
         }
 
-        Link* temp = front->next;
-        int it = temp->element;
-        front->next = temp->next;
-        if (rear == temp) {
+        int it = front->next->element;
+        if (rear == front->next) {
             rear = front;
         }
-        delete temp;
+        front->next = front->next->next;
         size--;
         return it;
     }
@@ -66,6 +64,7 @@ int main() {
     q.enqueue(10);
     q.enqueue(20);
     q.enqueue(30);
+    q.enqueue(40);
 
     cout << "Tamanho da fila: " << q.size << endl;  // Esperado: 3
     cout << "Elemento front : " << q.frontValue() << endl;
@@ -80,5 +79,4 @@ int main() {
     cout << "Desenfileirando apos limpar: " << q.dequeue() << endl;  // Esperado: -1
 
     return 0;
-}
-
+};

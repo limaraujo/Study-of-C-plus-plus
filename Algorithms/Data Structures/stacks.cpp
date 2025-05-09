@@ -6,7 +6,7 @@ using namespace std;
 typedef struct Link {
     int element;
     Link* next;
-    
+
     Link(int e) : element(e), next(nullptr) {}
 } Link;
 
